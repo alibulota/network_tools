@@ -1,7 +1,6 @@
 import socket
 import sys
 
-
 def echo_server():
     user_socket = socket.socket(
         socket.AF_INET,
@@ -20,7 +19,11 @@ def echo_server():
             if len(msg_recieved) < 32:
                 print msg_recieved
                 break
-        conn.shutdown(socket.SHUT_RD)
+        try:
+            # This seems to be a mac-specific bug
+            conn.shutdown(socket.SHUT_RD)
+        except Exception, e:
+            pass
         conn.sendall(message)
         conn.shutdown(socket.SHUT_WR)
         conn.close()
