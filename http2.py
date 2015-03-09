@@ -26,8 +26,10 @@ class NotHTTP1_1Error(Exception):
 class BadRequestError(Exception):
     pass
 
+
 class ResourceNotFound(Exception):
     pass
+
 
 class HttpServer(object):
     def http_server():
@@ -89,15 +91,14 @@ class HttpServer(object):
     def resolve_uri(self, uri):
         u = self._root + uri
         if isdir(u):
-            # If the resource identified by the URI is a directory, return a  
-            # simple HTML listing of that directory as the body.
+            # return a simple HTML listing of that directorythe body.)
             body = ["<p>Directory Listing for "]
             body.append(uri)
             body.append("</p><ul>")
             dirs = []
             files = []
             for item in listdir(u):
-                if isdir(u+item):
+                if isdir(u + item):
                     dirs.append(item + b'/')
                 else:
                     files.append(item)
@@ -105,7 +106,7 @@ class HttpServer(object):
             files.sort()
             resources = dirs + files
             for item in resources:
-                    body.append('<li><a href="{}">{}</a></li>'.format(item, item))
+                body.append('<li><a href="{}">{}</a></li>'.format(item, item))
             body.append("</ul>")
             return ("".join(body), "text/html")
         elif isfile(u):
@@ -117,5 +118,5 @@ class HttpServer(object):
                 content_type, content_encoding = mimetypes.guess_type(uri)
                 return (body, content_type)
         else:
-            # If the requested resource cannot be found, raise an appropriate # error
+            # requested resource cannot be found, raise an appropriate # error
             raise ResourceNotFound
