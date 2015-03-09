@@ -2,7 +2,23 @@ import socket
 import sys
 
 
-class HttpServer(Exception):
+class InvalidHTTPCodeError(Exception):
+    pass
+
+
+class NotGETRequestError(Exception):
+    pass
+
+
+class NotHTTP1_1Error(Exception):
+    pass
+
+
+class BadRequestError(Exception):
+    pass
+
+
+class HttpServer(object):
     def http_server():
         user_socket = socket.socket(
             socket.AF_INET,
@@ -34,9 +50,9 @@ class HttpServer(Exception):
         user_socket.close()
         return unicode(message, 'utf=8')
 
-
     def response_ok():
-
+        return "HTTP/1.1 200 OK\r\n\
+        Content-Type: text/plain\r\n\r\n".encode('utf-8')
 
     def response_error(self, code, msg=None):
         try:
@@ -45,20 +61,16 @@ class HttpServer(Exception):
             response = "HTTP/1.1 {} {}\r\n".format(code, msg)
             return response
         except KeyError:
-            raise InvalidHttpCodeError(
+            raise InvalidHTTPCodeError(
                 u'{} is not a valid HTTP code'.format(code))
-
 
     def parse_request(self, request):
         split_list = request.split('\r\n')
-        list_status = list_[0].split(' ')
+        list_status = split_list[0].split(' ')
         if len(list_status) != 3:
             raise BadRequestError
         if list_status[0] != 'GET':
             raise NotGETRequestError
         if list_status[2] != 'HTTP/1.1':
             raise NotHTTP1_1Error
-        reutrn list_status[1]
-
-if __name__ == '__main__':
-    echo_server()
+        return list_status[1]
