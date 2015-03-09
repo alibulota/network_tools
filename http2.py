@@ -86,36 +86,36 @@ class HttpServer(object):
             raise NotHTTP1_1Error
         return list_status[1]
 
-def resolve_uri(self, uri):
-    u = self._root + uri
-    if isdir(u):
-        # If the resource identified by the URI is a directory, return a  
-        # simple HTML listing of that directory as the body.
-        body = ["<p>Directory Listing for "]
-        body.append(uri)
-        body.append("</p><ul>")
-        dirs = []
-        files = []
-        for item in listdir(u):
-            if isdir(u+item):
-                dirs.append(item + b'/')
-            else:
-                files.append(item)
-        dirs.sort()
-        files.sort()
-        resources = dirs + files
-        for item in resources:
-                body.append('<li><a href="{}">{}</a></li>'.format(item, item))
-        body.append("</ul>")
-        return ("".join(body), "text/html")
-    elif isfile(u):
-        # if the resource identified by the URI is a file, return the
-        # contents of the file as the body
-        # The content type value should be related to the type of file.
-        with open(self._root + uri, 'rb') as resource:
-            body = resource.read()
-            content_type, content_encoding = mimetypes.guess_type(uri)
-            return (body, content_type)
-    else:
-        # If the requested resource cannot be found, raise an appropriate # error
-        raise ResourceNotFound
+    def resolve_uri(self, uri):
+        u = self._root + uri
+        if isdir(u):
+            # If the resource identified by the URI is a directory, return a  
+            # simple HTML listing of that directory as the body.
+            body = ["<p>Directory Listing for "]
+            body.append(uri)
+            body.append("</p><ul>")
+            dirs = []
+            files = []
+            for item in listdir(u):
+                if isdir(u+item):
+                    dirs.append(item + b'/')
+                else:
+                    files.append(item)
+            dirs.sort()
+            files.sort()
+            resources = dirs + files
+            for item in resources:
+                    body.append('<li><a href="{}">{}</a></li>'.format(item, item))
+            body.append("</ul>")
+            return ("".join(body), "text/html")
+        elif isfile(u):
+            # if the resource identified by the URI is a file, return the
+            # contents of the file as the body
+            # The content type value should be related to the type of file.
+            with open(self._root + uri, 'rb') as resource:
+                body = resource.read()
+                content_type, content_encoding = mimetypes.guess_type(uri)
+                return (body, content_type)
+        else:
+            # If the requested resource cannot be found, raise an appropriate # error
+            raise ResourceNotFound
