@@ -2,7 +2,7 @@ import pytest
 from echo_server import echo_server
 from echo_client import echo_client
 from http1 import http1, response_ok, response_error, parse_request
-
+from http2 import HttpServer
 
 def test_reponse_ok():
     response = '200 OK'
@@ -20,3 +20,11 @@ def test_response_error():
 def test_parse_request():
     response = parse_request('GET HTTP/1.1')
     assert '200 OK' in response
+
+def test_resolve_uri():
+    test_str = u'Hey, it is Bob.'
+    server = HttpServer()
+    body, content_type = resolve_uri(b"sample.text")
+    assert content_type == b"text/html"
+    assert body.decode('utf-8') == test_str
+
